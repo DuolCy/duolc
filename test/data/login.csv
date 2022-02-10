@@ -1,0 +1,5 @@
+case_id,case_title,url,name,pwd,expect,case_severity
+_001,输入正确的账号密码,http://46.8.197.234:8975/home/passport/login,173326303@test.com,kupNvHoihOovjnt/b7e4hoI6b56tbClRCmuQvm7Hrx3ZR/YqKCv70KKuswy4wxjweqmgsN74BptdMs38LqaghQ4Jm4rYxZN4J/gU0M7YBMihxh4/hN4KhxhbZkxmn1ZHdL1jIeOqfDRUmHs8ACA2tWHr75povgGPTTnoY077U68=,token,blocker
+_002,输入错误的账号正确的密码,http://46.8.197.234:8975/home/passport/login,17332@qq.com,kupNvHoihOovjnt/b7e4hoI6b56tbClRCmuQvm7Hrx3ZR/YqKCv70KKuswy4wxjweqmgsN74BptdMs38LqaghQ4Jm4rYxZN4J/gU0M7YBMihxh4/hN4KhxhbZkxmn1ZHdL1jIeOqfDRUmHs8ACA2tWHr75povgGPTTnoY077U68=,请输入正确的账户或密码,normal
+_003,输入正确账号错误密码,http://46.8.197.234:8975/home/passport/login,173326303@test.com,12121312,请输入正确的账户或密码,normal
+_004,全部输入为空,http://46.8.197.234:8975/home/passport/login,,,请输入账号,normal
