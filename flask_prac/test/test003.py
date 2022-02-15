@@ -54,6 +54,10 @@ def reg():
             return json.dumps({"code":1001, "msg": "Name cannot exceed 10 characters !"})
         elif len(password) < 6:
             return json.dumps({"code":2000,"msg": "Password must be greater than six digits !"})
+        elif password.isdigit():
+            return json.dumps({"code":2001, "msg": "The password cannot be a pure number !"})
+        elif password.isalpha():
+            return json.dumps({"code":2002, "msg": "The password cannot be a pure letter !"})
         elif sex not in ['男','女']:
             return json.dumps({"code":3000, "msg": "Please enter the correct gender !"})
         elif not age.isdigit() or int(age) <= 0:
