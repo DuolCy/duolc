@@ -48,10 +48,29 @@ http = urllib3.PoolManager()  # 创建PoolManager对象生成请求, 由该实�
 url = 'https://s.weibo.com/top/summary?cate=realtimehot/'
 resp = requests.get(url,headers={'user-agent':'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.25 Safari/537.36 Core/1.70.3883.400 QQBrowser/10.8.4559.400','cookie': 'SUB=_2AkMVVV66f8NxqwJRmfoUym7ibYt0zQvEieKjCa9hJRMxHRl-yT9jqlQBtRB6PtVwVRQ0PX9Ys2ARwx84m4B3Y5rGQTXx; SUBP=0033WrSXqPxfM72-Ws9jqgMF55529P9D9W5z8ha_.RPknZ3v3zrguDY_; _s_tentry=passport.weibo.com; UOR=passport.weibo.com,s.weibo.com,spr_wbprod_sougou_sgss_weibo_t001; Apache=6629531056919.831.1644810640894; SINAGLOBAL=6629531056919.831.1644810640894; ULV=1644810641010:1:1:1:6629531056919.831.1644810640894:'})
 html = resp.text
-# resp.encoding('utf-8')
-soup = BeautifulSoup(html)
-print(soup.prettify())
+# # resp.encoding('utf-8')
+# soup = BeautifulSoup(html)
+# print(soup.prettify())
 # html_msg = 'target="_blank">(.*?)</a>'
 # html_url = '<a href="(.*?)" target="_blank">'
 # url_weibo= 'https://s.weibo.com'
 
+from bs4 import BeautifulSoup
+# soup = BeautifulSoup('<p class="Web site url"><b>c.biancheng.net</b></p>', 'html.parser')
+soup = BeautifulSoup(html)
+print(soup.prettify())
+#获取整个p标签的html代码
+print('获取整个p标签的html代码:',soup.p)
+#获取b标签
+print('获取b标签:',soup.p.b)
+#获取p标签内容，使用NavigableString类中的string、text、get_text()
+print('获取p标签内容:',soup.p.text)
+#返回一个字典，里面是多有属性和值
+print(soup.p.attrs)
+#查看返回的数据类型
+print(type(soup.p))
+#根据属性，获取标签的属性值，返回值为列表
+print(soup.p['class'])
+#给class属性赋值,此时属性值由列表转换为字符串
+soup.p['class']=['Web','Site']
+print(soup.p)
