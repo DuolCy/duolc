@@ -72,4 +72,4 @@ def reg():
         return  json.dumps({"code":6000, "msg":"Parameter cannot be empty !"})
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True,host='10.0.0.75')
