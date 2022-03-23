@@ -316,9 +316,38 @@ class Add_and_proxy():
         print(add_3.call_args)        #替代的内容
         print(add_3.return_value) #替代输出的值
 # Add_and_proxy().add_and_p(3,4)
-li = [1,2,3,4,5,6]
-def addd(a):
-    return a*a
-# print(list(map(addd,li)))
-print(list(map(lambda x:x*2 if x%2==0 else x*1,li)))
-print(reduce(lambda x,y:x+y ,li))
+# li = [1,2,3,4,5,6]
+# def addd(a):
+#     return a*a
+# # print(list(map(addd,li)))
+# print(list(map(lambda x:x*2 if x%2==0 else x*1,li)))
+# print(reduce(lambda x,y:x+y ,li))
+
+
+#配置文件
+import configparser
+
+#初始化
+conf = configparser.ConfigParser()
+#读文件
+conf.read('config.ini',encoding='utf-8')
+
+#获取配置文件中的所有sections
+print(conf.sections())
+print(conf.has_section('mysql'))
+print(conf.options('Mysql'))
+print(conf.get('Mysql','host'),type(conf.get('Mysql','host')))
+print(conf.get('DEFAULT','version'))
+print(conf.get('DEFAULT','path'))
+
+print(conf.get('XL','cookie'))
+print(conf.get('XL','user_agen'))
+#增加新的数据后，是写入内存的，需要写入文件，用w
+# conf.add_section('Tools')
+# conf.set('Tools','tools','google')
+# conf.get('Tools','tools')
+# conf.set('Tools','num','123')
+# with open('./config.ini',mode='w',encoding='utf-8') as f:
+#     conf.write(f)
+
+
