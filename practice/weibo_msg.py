@@ -47,7 +47,7 @@ class Wb:
                     self.conf.set('XL', 'update_time',(datetime.datetime.now() + datetime.timedelta(days=1)).strftime("%Y-%m-%d %H:%M:%S"))
                     with open('./config.ini', mode='w', encoding='utf-8') as f:
                         self.conf.write(f)
-                    return print(f'cookie到期了,python提示{e}')
+                    return print(f'cookie到期了,请手动添加cookie，这是python提示{e}')
                 elif type(e) != type(eorr_w):
                     print(f'出错了！原因是{e}')
             else:
@@ -77,8 +77,8 @@ def test():
 if __name__ == '__main__':
     # # while 1:
     # #     if time.strftime("%Y-%m-%d %H:%M:%S") == '2022-02-19 16:59:55':
-    weibo =Wb()
-    weibo.wb()
+    # weibo =Wb()
+    # weibo.wb()
     # # #         break
     # # print(type(time.strftime("%Y-%m-%d %H:%M:%S")))
     # print(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
