@@ -15,6 +15,7 @@ import smtplib
 from functools import reduce
 
 import urllib3,urllib,requests
+from Crypto.Random import random
 from bs4 import BeautifulSoup
 from urllib.parse import urlencode
 
@@ -333,15 +334,15 @@ conf = configparser.ConfigParser()
 conf.read('config.ini',encoding='utf-8')
 
 #获取配置文件中的所有sections
-print(conf.sections())
-print(conf.has_section('mysql'))
-print(conf.options('Mysql'))
-print(conf.get('Mysql','host'),type(conf.get('Mysql','host')))
-print(conf.get('DEFAULT','version'))
-print(conf.get('DEFAULT','path'))
-
-print(conf.get('XL','cookie'))
-print(conf.get('XL','user_agen'))
+# print(conf.sections())
+# print(conf.has_section('mysql'))
+# print(conf.options('Mysql'))
+# print(conf.get('Mysql','host'),type(conf.get('Mysql','host')))
+# print(conf.get('DEFAULT','version'))
+# print(conf.get('DEFAULT','path'))
+#
+# print(conf.get('XL','cookie'))
+# print(conf.get('XL','user_agen'))
 #增加新的数据后，是写入内存的，需要写入文件，用w
 # conf.add_section('Tools')
 # conf.set('Tools','tools','google')
@@ -349,5 +350,192 @@ print(conf.get('XL','user_agen'))
 # conf.set('Tools','num','123')
 # with open('./config.ini',mode='w',encoding='utf-8') as f:
 #     conf.write(f)
+import yaml
+with open(r'F:\Users\admin\PycharmProjects\untitled\practice\test_p.yaml' ,mode='a',encoding='utf-8') as f:
+    f.writelines('\n1: sorry')
+    f.seek(0)
+    # data = yaml.safe_load_all(f.read())
+    # # data = yaml.load(f.read(),Loader=yaml.CLoader)
+    # # for i in data:
+    #
+    # print(list(data))
+
+    # print(f.read(), type(f.read()))
+# l = '2121=111'
+# def test2(**kwargs):
+#     for key, parameter in kwargs.items():
+#         print(key, parameter)
+#     print(kwargs)
+# test2()
+# """编写程序，查找文本文件中最长的单词"""
+    def msg(file):
+        with open(file,'r',encoding='utf-8') as f:
+            ms = f.read()
+            # print(        f.read())
+        mm  = ms.replace(',','').replace('.','')
+        li_m = mm.split(' ')
+        max_li = []
+
+        for i in range(len(li_m)):
+            max_li.append(len(li_m[i]))
+        # for i in range(len(li_m)):
+        #     if len(li_m[i]) == max(max_li):
+        #         print(li_m[i])
+        return [li_m[i] for  i in range(len(li_m)) if len(li_m[i]) == max(max_li)]
+    # print(msg(r'F:\Users\admin\PycharmProjects\untitled\practice\test_pytest_my\eng.txt'))
+
+    # 编写程序，检查序列是否为回文
+    # a = input('输入数字')
+    # if int(a) == int(a[::-1]):
+    #     print('a是回文数')
+    def count_word(file):
+        with open(file, 'r', encoding='utf-8') as f:
+            ms = f.read()
+            # print(        f.read())
+        mm = ms.replace(',', '').replace('.', '')
+        li_m = mm.split(' ')
+        li = []
+        for i in range(len(li_m)):
+            li.append(li_m[i] +'次数'+ str(li_m.count(li_m[i])))
+        print(li)
+    # count_word(r'F:\Users\admin\PycharmProjects\untitled\practice\test_pytest_my\eng.txt')
+    # 编写程序，检查数字是否为Armstrong,将每个数字依次分离，并累加其立方(位数)。最后，如果发现总和等于原始数，则称为阿姆斯特朗数(Armstrong)。
+    #如3³+7³+0³=27+343+0 = 370
+    int_a = []
+    for i in range(1000):
+        if len(str(i)) ==1:
+            if  int(str(i)[0])*int(str(i)[0])*int(str(i)[0]) ==i:
+                int_a.append(i)
+
+        elif len((str(i)))==2:
+            if int(str(i)[0])*int(str(i)[0])*int(str(i)[0]) +int(str(i)[1])*int(str(i)[1])*int(str(i)[1])==i:
+                int_a.append(i)
 
 
+        elif len((str(i)))==3:
+            if int(str(i)[0])*int(str(i)[0])*int(str(i)[0]) +int(str(i)[1])*int(str(i)[1])*int(str(i)[1])+int(str(i)[2])*int(str(i)[2])*int(str(i)[2])==i:
+                int_a.append(i)
+    # print(int_a)
+    a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    ji,ou =[i for i in a if i % 2 ==1],[i for i in a if i % 2 ==0]
+    # print(ji,ou)
+    # print([i for i in a if i //2 ==1])
+
+    # 问题: 编写一个程序，接受逗号分隔的单词序列作为输入，按字母顺序排序后按逗号分隔的序列打印单词
+    words = 'without,hello,bag,world'
+    li_word = words.split(',')
+    # li_word.sort()
+    li = sorted(li_word)
+    # print(li)
+    # print(li_word)
+    # 接受一系列空格分隔的单词作为输入，并在删除所有重复的单词并按字母数字排序后打印这些单词。
+    string = 'hello world and practice makes perfect and hello world again'
+    new_li = string.split(' ')
+    new_set = set(new_li)
+    #不能使用list.sort(),这个返回为空
+    new_sortes = sorted(list(new_set))
+    new_str = str(new_sortes).replace('[','').replace(']','')
+    new_s = new_str.replace("'","").replace(',','')
+    # print(new_s,type(new_str))
+# 编写一个程序，接受一系列逗号分隔的4位二进制数作为输入，然后检查它们是否可被5整除。 可被5整除的数字将以逗号分隔的顺序打印。
+
+# 0100,0011,1010,1001
+# # 那么输出应该是：
+# # 1010
+#     a =input('输入数字组合')
+#     li_a = a.split(',')
+#     print(li_a)
+#     result_int = []
+#     for i in  li_a:
+#         if int(i)>=1000 and int(i) %5==0:
+#             result_int.append(i)
+#     print(result_int)
+#
+# 您的程序应接受一系列逗号分隔的密码，并将根据上述标准进行检查。将打印符合条件的密码，每个密码用逗号分隔。
+# 例：如果以下密码作为程序的输入：
+#
+# ABd1234@1,a F1#,2w3E*,2We3345
+# 然后，程序的输出应该是：
+#
+# ABd1234 @ 1
+# string1 = 'ABd1234@1,a F1#,2w3E*,2We3345'
+# new_str = string1.split(',')
+# for i in new_str:
+#     if len(i)>=6 and len(i)<=12:
+#         if '$' in i or "#" in i or "@" in i:
+#             if
+from operator import itemgetter
+
+# fruit = ["apple0.5", "pear", "grape", "watermelon", "apple0.1", "banana"]
+# sorted(参数1，参数2，参数3)
+# 参数1: 任意的可迭代对象,
+# 参数2: key, 可省略, 默认ASCII码排序
+# 参数3: reverse
+# 是否反转, 默认为: reverse = False
+# f = sorted(fruit,key=len,reverse=True)#
+# print(f)
+
+# num_list = [1, '12', 7, '8', 10, '5']
+# num_sort = sorted(num_list,key=str)
+# num_int = sorted(num_list,key=int)
+# print(num_sort,num_int,sep='\n')
+# list_tup = [('watermelon',2),('apple111',11111),('apple0.5', "apple0.1")]
+# list_dic = [{'apple0.5': "apple0.1",'1':'2121'},{'apple111':11111},{'watermelon':2}]
+# f  =sorted(list_tup,key=lambda  x:x[0])
+# print(f)
+# f1 = sorted(list_tup,key=itemgetter(0))
+# print(f1)
+# lis = list_dic[0].items()
+# # for i in lis:
+# print(dict([(1,2)]))
+# print(lis)
+# 使用生成器定义一个类，该生成器可以在给定范围0和n之间迭代可被7整除的数字。
+# def test_yield(a,b):
+#     yield a+b
+#     yield a-b
+# a = test_yield(1,100)
+# print(next(a))
+# point = [0,0]
+# # while 1:
+# #
+# #     a = input('输入方向和步数')
+# #
+# #     if 'UP' in a:
+# #         li = a.split(' ')
+# #         point[0] +=int(li[1])
+# #         print(point)
+# #     elif 'DOWN' in a:
+# #         li = a.split(' ')
+# #         point[0] -=int(li[1])
+# #         print(point)
+# #     elif 'LEFT' in a:
+# #         li = a.split(' ')
+# #         point[1] -= int(li[1])
+# #         print(point)
+# #     elif 'RIGHT' in a:
+# #         li = a.split(' ')
+# #         point[1] += int(li[1])
+# #         print(point)
+# #     elif 'pass' in a:
+# #         break
+
+import random
+# print([i for i in map(lambda x:x**2,[1,2,3,4,5]) if i>10])
+# print(random.random())
+s = 'ajldjlajfdljfddd'
+s = set(s)
+s = list(s)
+s.sort(reverse=False)
+res = "".join(s)
+# print(res,s)
+he = ''.join(['a', 'd', 'f', 'j', 'l'])
+print(he)
+d = {"a":"a","b":"2"}
+print('-'.join(d.values()))
+num = 'a￥1aB23Cqqq$我.04'
+print("原字符串： ", num)
+# 字符串只保留中文
+num1 = re.sub(u"([^\u4e00-\u9fa5])", "", num)
+num2 = re.sub(u"([^a-z])", "", num)
+print("字符串只保留中文： ", num1)
+print(num2)

@@ -10,13 +10,19 @@ from datetime import date
 import requests,re,time
 class Wb:
     def __init__(self):
-        self.conf = configparser.ConfigParser()
-        self.conf.read('config.ini', encoding='utf-8')
-        self.user_agen= self.conf.get('XL','user_agen')
-        self.cookie= self.conf.get('XL','cookie')
-        self.update_time= self.conf.get('XL','update_time')
-
-
+        try:
+            self.conf = configparser.ConfigParser()
+            self.conf.read('config.ini', encoding='utf-8')
+            self.cookie = self.conf.get('XL', 'cookie')
+        except configparser.InterpolationSyntaxError as e:
+            print(f'配置文件异常cookie异常，异常报错为{e}')
+            self.conf = configparser.RawConfigParser()
+            self.conf.read('config.ini', encoding='utf-8')
+            self.cookie = self.conf.get('XL', 'cookie')
+        finally:
+            self.user_agen = self.conf.get('XL', 'user_agen')
+            self.update_time = self.conf.get('XL', 'update_time')
+            self.excepted_time = self.conf.get('XL','excepted_time')
 
     def wb(self):
         url = ['https://s.weibo.com/top/summary?cate=realtimehot/','https://s.weibo.com/top/summary?cate=entrank']
@@ -44,7 +50,8 @@ class Wb:
                 eorr_w =IndexError('list assignment index out of range')
                 #不能直接将报错信息in e，e的类型是IndexError ，不是可迭代对象
                 if type(e) == type(eorr_w):
-                    self.conf.set('XL', 'update_time',(datetime.datetime.now() + datetime.timedelta(days=1)).strftime("%Y-%m-%d %H:%M:%S"))
+                    self.conf.set('XL', 'excepted_time',(datetime.datetime.now() + datetime.timedelta(days=1)).strftime("%Y-%m-%d %H:%M:%S"))#预计到期时间
+                    self.conf.set('XL','update_time',time.strftime("%Y-%m-%d %H:%M:%S"))#现在时间
                     with open('./config.ini', mode='w', encoding='utf-8') as f:
                         self.conf.write(f)
                     return print(f'cookie到期了,请手动添加cookie，这是python提示{e}')
@@ -67,7 +74,7 @@ class Wb:
                                 li_msg.append('热度：' + all_hot[i - 1] + ',   ')
                         li_msg.append(url_weibo + all_url[i] +'\n')
                     f.writelines(li_msg)
-        print(f'下载成功,cookie过期时间为{self.update_time}')
+        print(f'下载成功的时间是{time.strftime("%Y-%m-%d %H:%M:%S")}，预计cookie过期时间为{self.excepted_time}')
 
 def test():
     user_agen,cookie='Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.25 Safari/537.36 Core/1.70.3883.400 QQBrowser/10.8.4559.400', 'SUB=_2AkMVVV66f8NxqwJRmfoUym7ibYt0zQvEieKjCa9hJRMxHRl-yT9jqlQBtRB6PtVwVRQ0PX9Ys2ARwx84m4B3Y5rGQTXx; SUBP=0033WrSXqPxfM72-Ws9jqgMF55529P9D9W5z8ha_.RPknZ3v3zrguDY_; _s_tentry=passport.weibo.com; UOR=passport.weibo.com,s.weibo.com,spr_wbprod_sougou_sgss_weibo_t001; Apache=6629531056919.831.1644810640894; SINAGLOBAL=6629531056919.831.1644810640894; ULV=1644810641010:1:1:1:6629531056919.831.1644810640894'
@@ -77,8 +84,8 @@ def test():
 if __name__ == '__main__':
     # # while 1:
     # #     if time.strftime("%Y-%m-%d %H:%M:%S") == '2022-02-19 16:59:55':
-    # weibo =Wb()
-    # weibo.wb()
+    weibo =Wb()
+    weibo.wb()
     # # #         break
     # # print(type(time.strftime("%Y-%m-%d %H:%M:%S")))
     # print(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
@@ -92,14 +99,51 @@ if __name__ == '__main__':
     #     html[i][0]=html[i][0]+(' '*(4-len(html[i][0])))
     # print(html)
     # print([len(html[0][0]), len(html[1][0])])
-    print(time.strftime("%Y-%m-%d %H:%M:%S",time.localtime()))
-    print(time.strftime("%Y-%m-%d %H:%M:%S"))
-    print((datetime.datetime.now()).strftime("%Y-%m-%d %H:%M:%S"))
-    print(date.today()+datetime.timedelta(days=1))
-    print(datetime.date.today()+datetime.timedelta(weeks=1))
+    # print(time.strftime("%Y-%m-%d %H:%M:%S",time.localtime()))
+    # print(time.strftime("%Y-%m-%d %H:%M:%S"))
+    # print((datetime.datetime.now()).strftime("%Y-%m-%d %H:%M:%S"))
+    # print(date.today()+datetime.timedelta(days=1))
+    # print(datetime.date.today()+datetime.timedelta(weeks=1))
     # from difflib import Differ
     # str1 = 'SINAGLOBAL=6629531056919.831.1644810640894; _s_tentry=-; Apache=936529738727.5939.1646701480611; ULV=1646701481368:3:1:1:936529738727.5939.1646701480611:1645238512100; WBtopGlobal_register_version=2022030913; SSOLoginState=1647931095; UOR=passport.weibo.com,s.weibo.com,login.sina.com.cn; SUBP=0033WrSXqPxfM725Ws9jqgMF55529P9D9W5Iy_mdRCeoizCmPoe5kyFA5JpX5KMhUgL.FozcSK.4Shn71h-2dJLoIpqLxK-L1-zLB-BLxK-L1KeLBKHkSGWX; ALF=1679646990; SCF=AhsQ7CF1SN90-_C3PRos7K1FuOe2I--rUW1Nl3RKQ4FgVZr_Ux-XZE3zWpRDdoSUNUA3UGT42DGlma1ZkP_SSIA.; SUB=_2A25POF3fDeRhGeRI7lsY9CbMwzmIHXVsTMgXrDV8PUNbmtB-LUnbkW9NUrAJ15l3VJ5gjS1TbveZ3gMdjKtMi2Qp; WBStorage=f4f1148c|undefined'
     # str2=  'SINAGLOBAL=6629531056919.831.1644810640894; _s_tentry=-; Apache=936529738727.5939.1646701480611; ULV=1646701481368:3:1:1:936529738727.5939.1646701480611:1645238512100; WBtopGlobal_register_version=2022030913; SSOLoginState=1647931095; SUBP=0033WrSXqPxfM725Ws9jqgMF55529P9D9W5Iy_mdRCeoizCmPoe5kyFA5JpX5KMhUgL.FozcSK.4Shn71h-2dJLoIpqLxK-L1-zLB-BLxK-L1KeLBKHkSGWX; ALF=1679560272; SCF=AhsQ7CF1SN90-_C3PRos7K1FuOe2I--rUW1Nl3RKQ4FgxYhLNvMGhJ6RhKnCV6Tt7qE_6kIYp6Ez7a2gosJ0r4M.; SUB=_2A25PPqqBDeRhGeRI7lsY9CbMwzmIHXVsTZtJrDV8PUNbmtANLXThkW9NUrAJ1yluHDuq04QyZ634zJ0ECAIM54aO; UOR=passport.weibo.com,s.weibo.com,login.sina.com.cn; WBStorage=f4f1148c|undefined'
     # d = Differ()
     # diff = d.compare(str1,str2)
     # print('\n'.join(list(diff)))
+    # try:
+    #     conf = configparser.ConfigParser()
+    #     conf.read('config.ini', encoding='utf-8')
+    #     conf.get('XL', 'cookie')
+    # except configparser.InterpolationSyntaxError as e:
+    #     if   'configparser.InterpolationSyntaxError'== type(e):
+    #         # conf = configparser.RawConfigParser()
+    #         # print(conf.get('XL', 'cookie'))
+    #
+    #     else:
+    #         print(e)
+    #     # conf = configparser.RawConfigParser()
+    #     # conf.read('config.ini', encoding='utf-8')
+    #     # # print(conf.get('XL','cookie'))
+    #     # # print(conf.get('XL','user_agen'))
+    #     # wa = 'wait'
+    #     # # conf.set('XL','nw','%(wa)s')
+    #     # print(conf.get('XL', 'nw'))
+    # li1 = str(["王二狗","李二蛋"])
+    # print(type(str(["王二狗","李二蛋"])),li1)
+    # li2= eval(li1)
+    #
+    #
+    # print(li2,type(li2))
+    # from functools import reduce
+    # print(reduce(lambda a,b:a+b,range(1,101)))
+    # print(sum(range(1,101)))
+    # li3 = [1]
+    # li4 = ['hahahah','wwww']
+    # li4.extend([2,5])
+    #
+    # li4.pop()
+    # li4.remove(2)
+    # print(li4)
+    # def add(x,y):
+    #     return x+y
+    # print(list(map(add,[1,2,3],[1,2,3])))
